@@ -1,5 +1,6 @@
-//
-// Created by omri on 8/31/15.
-//
-
 #include "LyricalSong.h"
+
+int LyricalSong::calculateScore()
+{
+	return 0;
+}

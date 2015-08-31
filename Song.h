@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 #include <map>
 
 #ifndef EX2_SONG_H
@@ -6,31 +7,32 @@
 
 using namespace std;
 
-
+/**
+ * @brief
+ */
 class Song {
  public:
 
-  /**
-   * @brief todo
-   */
-  int virtual calculateScore();
+    virtual /**
+     *
+     */
+    int virtual calculateScore();
 
  private:
+	/**
+	 *
+	 */
+	int _score;
 
-  /**
-   *
-   */
-  int _score;
+	/**
+	 *
+	 */
+    string _title;
 
-  /**
-   *
-   */
-  string _title;
-
-  /**
-   *
-   */
-  map<string ,int> _tags;
+	/**
+	 *
+	 */
+    map<string ,int> _tags;
 };
 
 

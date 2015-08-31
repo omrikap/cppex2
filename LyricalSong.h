@@ -4,8 +4,16 @@
 #define EX2_LYRICALSONG_H
 
 #include "Song.h"
-class LyricalSong : private Song {
 
+/**
+ * @brief
+ */
+class LyricalSong : public Song {
+public:
+	int calculateScore();
+private:
+	vector _lyrics;
+	vector _lyricsBy;
 };
 
 
