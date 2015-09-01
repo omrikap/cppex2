@@ -16,9 +16,9 @@ private:
     int calculateScore();
 
 private:
-	vector _instruments;
-	vector _performedBy;
-	vector _mood;
+	vector<string> _instruments;
+	vector<string> _performedBy;
+	vector<string> _mood;
 };
 
 

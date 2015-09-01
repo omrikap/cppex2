@@ -1,3 +1,5 @@
+// Manager.h
+
 #ifndef EX2_READINGSONGSTEMPLATE_H
 #define EX2_READINGSONGSTEMPLATE_H
 
@@ -29,14 +31,19 @@ class Manager
 {
 public:
 	/**
-	 * @brief
+	 * @brief bpm to mood.
+	 */
+	string bpmToMood(string &bpm);
+
+	/**
+	 * @brief return all the line between {}
 	 */
     std::string getWordList(const std::string line);
 
 	/**
 	 * @brief
 	 */
-	list<Song>* readSongsFromFile(std::string songsFileName);
+	vector<Song> * readSongsFromFile(std::string songsFileName);
 
 private:
 	/** @brief The list of songs */

@@ -1,27 +1,34 @@
+// Manager.cpp
 #include "Manager.h"
 #include "Song.h"
 #include "LyricalSong.h"
 
-/**
-* return all the line between {}
-*/
+/*
+ * documented in the header.
+ */
 std::string Manager::getWordList(const std::string line)
 {
-
 	size_t pos1 = line.find("{");
 	size_t pos2 = line.find("}");
 
 	return line.substr(pos1+1,pos2-pos1-1);
 }
 
+/*
+ * documented in the header.
+ */
+string Manager::bpmToMood(string &bpm)
+{
+	return ""; // todo
+}
 
 /**
-* This can either be a basis for a member function of some class or static function or whatever...
-*/
-list<Song>* Manager::readSongsFromFile(std::string songsFileName)
+ * documented in header file.
+ */
+vector<Song> * Manager::readSongsFromFile(std::string songsFileName)
 {
 	// this is where the Song objects parsed from the file will be stored.
-	list<Song> *songsList = new list<Song>();
+	vector<Song> *songsList = new vector<Song>();
 
 	std::ifstream instream(songsFileName.c_str());
 	if (!instream.is_open())
@@ -30,8 +37,6 @@ list<Song>* Manager::readSongsFromFile(std::string songsFileName)
 	}
 
 	std::string line = "";
-
-
 
 	int lastSong = 0;
 
@@ -77,8 +82,9 @@ list<Song>* Manager::readSongsFromFile(std::string songsFileName)
 			pos = LYRICS_BY.size() + 2;
 			lyricsBy = line.substr(pos);
 
-			// TODO....
 			LyricalSong *lyricalSong = new LyricalSong();
+			lyricalSong->setTitle(title);
+			songsList->push_back(*lyricalSong);
 		}
 		else
 		{
@@ -109,18 +115,20 @@ list<Song>* Manager::readSongsFromFile(std::string songsFileName)
 
 				pos = BPM.size() + 2;
 				bpmStr = line.substr(pos);
+				string moodString = bpmToMood(bpmStr);
 
-				// TODO....
+				// TODO what happens with bpm.
 			}
 			else
 			{
 				assert ( (line.compare(SEPARATOR) == 0) || (line.compare(END_OF_SONGS) == 0));
 
-
-				// TODO....
+				// TODO what happens if no bpm?
 			}
+
 		}
 	}
 	instream.close();
 	return songsList;
 }
+

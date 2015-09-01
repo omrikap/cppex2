@@ -12,8 +12,8 @@ class LyricalSong : public Song {
 public:
 	int calculateScore();
 private:
-	vector _lyrics;
-	vector _lyricsBy;
+	vector<string> _lyrics;
+	vector<string> _lyricsBy;
 };
 
 
