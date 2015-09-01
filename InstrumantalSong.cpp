@@ -1,6 +1,7 @@
 #include "InstrumantalSong.h"
 
-int virtual InstrumantalSong::calculateScore()
+int InstrumantalSong::calculateScore()
 {
+	cout << this->_score; //todo remove
 	return Song::calculateScore();
 }

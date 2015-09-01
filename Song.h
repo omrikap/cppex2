@@ -11,14 +11,15 @@ using namespace std;
  * @brief
  */
 class Song {
- public:
-
-    virtual /**
-     *
+public:
+    /**
+     * @brief this method calculates the score of every Song object.
      */
-    int virtual calculateScore();
+    virtual int calculateScore();
 
- private:
+
+
+protected:
 	/**
 	 *
 	 */
@@ -27,7 +28,7 @@ class Song {
 	/**
 	 *
 	 */
-    string _title;
+    vector _title;
 
 	/**
 	 *

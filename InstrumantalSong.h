@@ -1,6 +1,4 @@
-//
-// Created by omri on 8/31/15.
-//
+
 
 #ifndef EX2_INSTRUMANTALSONG_H
 #define EX2_INSTRUMANTALSONG_H
@@ -15,7 +13,7 @@ class InstrumantalSong : public Song {
 public:
 
 private:
-    virtual int virtual calculateScore() override;
+    int calculateScore();
 
 private:
 	vector _instruments;
