@@ -29,7 +29,40 @@ vector<string> Manager::stringToVector(const string &theString)
 	{
 		string word;
 		*iss >> word;
-		result->push_back(word);
+
+		// don't push empty strings from the vector
+		if (word != "")
+		{
+			result->push_back(word);
+		}
+	}
+
+	return *result;
+}
+
+/*
+ * documented in the header.
+ */
+map<string, int> Manager::stringToMap(const string &theString)
+{
+	// Put the string in a string stream object to iterate on words.
+	istringstream *iss = new istringstream(theString);
+
+	// Create a vector to put words in. Dynamic because it's size is unknown.
+	map<string, int> *result = new map<string, int>();
+
+	while (*iss)
+	{
+		string word;
+		string weight;
+		*iss >> word;
+		*iss >> weight;
+
+		// stoi can't get empty string.
+		if (weight != "" || word != "")
+		{
+			result->insert(std::pair<string,int>(word, stoi(weight, nullptr)));
+		}
 	}
 
 	return *result;
@@ -107,7 +140,8 @@ vector<Song> * Manager::readSongsFromFile(std::string songsFileName)
 			lyricsBy = line.substr(pos);
 
 			LyricalSong *lyricalSong = new LyricalSong();
-			lyricalSong->setTitle(title);
+			lyricalSong->setTitle(stringToVector(title));
+			lyricalSong->setTags(stringToMap(tags));
 			songsList->push_back(*lyricalSong);
 		}
 		else
@@ -150,6 +184,8 @@ vector<Song> * Manager::readSongsFromFile(std::string songsFileName)
 				// TODO what happens if no bpm?
 			}
 			InstrumentalSong *instrumentalSong = new InstrumentalSong();
+			instrumentalSong->setTitle(stringToVector(title));
+			songsList->push_back(*instrumentalSong);
 		}
 	}
 	instream.close();

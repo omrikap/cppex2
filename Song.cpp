@@ -28,7 +28,7 @@ void Song::setScore(int _score)
 /*
  * documented in the header file
  */
-const string &Song::getTitle() const
+const vector<string> & Song::getTitle() const
 {
 	return _title;
 }
@@ -36,7 +36,7 @@ const string &Song::getTitle() const
 /*
  * documented in the header file
  */
-void Song::setTitle(const string &title)
+void Song::setTitle(const vector<string> &title)
 {
 	Song::_title = title;
 }

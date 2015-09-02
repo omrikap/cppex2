@@ -15,14 +15,14 @@ public:
 	/**
 	 * @brief the default constructor.
 	 */
-    LyricalSong(); //todo remove?
+//    LyricalSong(); //todo remove?
 
 	/**
 	 * @brief A constructor for the parsing process. Used by the manager.
 	 * @param todo
 	 * @param todo
 	 */
-	LyricalSong(string &title); //todo finish constructor signature.
+//	LyricalSong(string &title); //todo finish constructor signature.
 
 // -------------------------------------- methods -------------------------------------------------
 	int calculateScore();
@@ -30,8 +30,8 @@ public:
 private:
 
 // --------------------------------- data-members -------------------------------------------------
-	vector<string> _lyrics;
-	vector<string> _lyricsBy;
+	vector<string> _lyrics; /** The lyrics of the song */
+	vector<string> _lyricsBy; /** The writer of the song */
 };
 
 
