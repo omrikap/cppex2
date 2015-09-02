@@ -9,7 +9,7 @@ using namespace std;
 /**
  * @brief The class that represent instrumental songs. Derived from the class Song.
  */
-class InstrumantalSong : public Song {
+class InstrumentalSong : public Song {
 public:
 
 private:

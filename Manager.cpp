@@ -1,7 +1,39 @@
 // Manager.cpp
+
+// todo 1. implement string to vector.
+// todo 2. implement string to map.
+// todo 3. get a complete songs file into a list of Songs.
+// todo 4. parse the parameters file.
+// todo 5. implement bpmToMood.
+// todo 6. implement calculateScore
+// todo 7. decide on sorting method.
+
+#include <sstream>
 #include "Manager.h"
 #include "Song.h"
 #include "LyricalSong.h"
+#include "InstrumentalSong.h"
+
+/*
+ * documented in the header.
+ */
+vector<string> Manager::stringToVector(const string &theString)
+{
+	// Put the string in a string stream object to iterate on words.
+	istringstream *iss = new istringstream(theString);
+
+	// Create a vector to put words in. Dynamic because size unknown.
+	vector<string> *result = new vector<string>();
+
+	while (*iss)
+	{
+		string word;
+		*iss >> word;
+		result->push_back(word);
+	}
+
+	return *result;
+}
 
 /*
  * documented in the header.
@@ -12,14 +44,6 @@ std::string Manager::getWordList(const std::string line)
 	size_t pos2 = line.find("}");
 
 	return line.substr(pos1+1,pos2-pos1-1);
-}
-
-/*
- * documented in the header.
- */
-string Manager::bpmToMood(string &bpm)
-{
-	return ""; // todo
 }
 
 /**
@@ -115,7 +139,7 @@ vector<Song> * Manager::readSongsFromFile(std::string songsFileName)
 
 				pos = BPM.size() + 2;
 				bpmStr = line.substr(pos);
-				string moodString = bpmToMood(bpmStr);
+//				string moodString = bpmToMood(bpmStr); fixme
 
 				// TODO what happens with bpm.
 			}
@@ -125,7 +149,7 @@ vector<Song> * Manager::readSongsFromFile(std::string songsFileName)
 
 				// TODO what happens if no bpm?
 			}
-
+			InstrumentalSong *instrumentalSong = new InstrumentalSong();
 		}
 	}
 	instream.close();
