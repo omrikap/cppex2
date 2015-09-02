@@ -22,10 +22,34 @@ public:
 	 * @param todo
 	 * @param todo
 	 */
-//	LyricalSong(string &title); //todo finish constructor signature.
+	LyricalSong(vector<string> &title, map<string, int> &tags, vector<string> &lyrics,
+	            vector<string> &lyricsBy);
 
 // -------------------------------------- methods -------------------------------------------------
-	int calculateScore();
+	/**
+	 * @brief todo
+	 */
+    int calculateScore();
+
+	/**
+	 * @brief lyrics getter.
+	 */
+    const vector<string> &getLyrics() const;
+
+    /**
+	 * @brief lyrics setter.
+	 */
+    void setLyrics(const vector<string> &_lyrics);
+
+    /**
+	 * @brief lyricsBy getter.
+	 */
+    const vector<string> &getLyricsBy() const;
+
+    /**
+	 * @brief lyricsBy setter.
+	 */
+    void setLyricsBy(const vector<string> &_lyricsBy);
 
 private:
 

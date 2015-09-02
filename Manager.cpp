@@ -1,8 +1,5 @@
 // Manager.cpp
 
-// todo 1. implement string to vector.
-// todo 2. implement string to map.
-// todo 3. get a complete songs file into a list of Songs.
 // todo 4. parse the parameters file.
 // todo 5. implement bpmToMood.
 // todo 6. implement calculateScore
@@ -14,10 +11,28 @@
 #include "LyricalSong.h"
 #include "InstrumentalSong.h"
 
+#define WEIGHTS 4
+#define TAG_MATCH "tagMatchScore:"
+#define LYRICS_MATCH "lyricsMatchScore:"
+
+Manager::Manager()
+{
+	_theSongs = new list<Song>();
+}
+
+
+Manager::~Manager()
+{
+	if (_theSongs != nullptr)
+	{
+		delete _theSongs;
+	}
+}
+
 /*
  * documented in the header.
  */
-vector<string> Manager::stringToVector(const string &theString)
+vector<string>& Manager::stringToVector(const string &theString)
 {
 	// Put the string in a string stream object to iterate on words.
 	istringstream *iss = new istringstream(theString);
@@ -43,7 +58,7 @@ vector<string> Manager::stringToVector(const string &theString)
 /*
  * documented in the header.
  */
-map<string, int> Manager::stringToMap(const string &theString)
+map<string, int>& Manager::stringToMap(const string &theString)
 {
 	// Put the string in a string stream object to iterate on words.
 	istringstream *iss = new istringstream(theString);
@@ -82,10 +97,10 @@ std::string Manager::getWordList(const std::string line)
 /**
  * documented in header file.
  */
-vector<Song> * Manager::readSongsFromFile(std::string songsFileName)
+list<Song> * Manager::readSongsFromFile(std::string songsFileName)
 {
 	// this is where the Song objects parsed from the file will be stored.
-	vector<Song> *songsList = new vector<Song>();
+//	vector<Song> *_theSongs = new vector<Song>();
 
 	std::ifstream instream(songsFileName.c_str());
 	if (!instream.is_open())
@@ -124,6 +139,7 @@ vector<Song> * Manager::readSongsFromFile(std::string songsFileName)
 		std::string instruments = "";
 		std::string performedBy = "";
 		std::string bpmStr = "";
+		std::string moodStr = "sad 10"; // todo remove. Temporary to prevent crash.
 
 		getline(instream, line);
 		// Expect either lyrics or instruments.
@@ -139,10 +155,10 @@ vector<Song> * Manager::readSongsFromFile(std::string songsFileName)
 			pos = LYRICS_BY.size() + 2;
 			lyricsBy = line.substr(pos);
 
-			LyricalSong *lyricalSong = new LyricalSong();
-			lyricalSong->setTitle(stringToVector(title));
-			lyricalSong->setTags(stringToMap(tags));
-			songsList->push_back(*lyricalSong);
+			LyricalSong *lyricalSong = new LyricalSong(stringToVector(title), stringToMap(tags),
+			                                           stringToVector(lyrics),
+			                                           stringToVector(lyricsBy));
+			this->_theSongs->push_back(*lyricalSong);
 		}
 		else
 		{
@@ -183,12 +199,67 @@ vector<Song> * Manager::readSongsFromFile(std::string songsFileName)
 
 				// TODO what happens if no bpm?
 			}
-			InstrumentalSong *instrumentalSong = new InstrumentalSong();
-			instrumentalSong->setTitle(stringToVector(title));
-			songsList->push_back(*instrumentalSong);
+			InstrumentalSong *instrumentalSong = new InstrumentalSong(stringToVector(title),
+			                                                          stringToMap(tags),
+			                                                          stringToVector(instruments)
+					,stringToVector(performedBy), stringToMap(moodStr));
+			this->_theSongs->push_back(*instrumentalSong);
 		}
 	}
 	instream.close();
-	return songsList;
+	return _theSongs;
 }
 
+void Manager::readParametersFromFile(string parametersFileName)
+{
+	std::ifstream instream(parametersFileName.c_str());
+	if (!instream.is_open())
+	{
+		std::cerr << "Error! Can't open file: " << parametersFileName << "." << std::endl;
+	}
+
+	std::string line = "";
+
+	for (int i = 0; i < WEIGHTS; ++i)
+	{
+		getline(instream, line);
+		cout << line << endl; // todo remove
+
+//		std::vector<std::string> &split(const std::string &s, char delim,std::vector<std::string> &elems) {
+//			std::stringstream ss(s);
+//			std::string item;
+//			while (std::getline(ss, item, delim)) {
+//				if (item.length() > 0) {
+//					elems.push_back(item);
+//				}
+//			}
+//			return elems;
+//		}
+//
+//
+//		std::vector<std::string> split(const std::string &s, char delim) {
+//			std::vector<std::string> elems;
+//			split(s, delim, elems);
+//			return elems;
+//		}
+	}
+
+	while(getline(instream, line))
+	{
+		if (line.compare("") == 0)
+		{
+			// skip empty lines
+			continue;
+		}
+
+		getline(instream, line);
+		// Expect a line of "title: ..."
+		size_t pos = TITLE.size() + 2;
+		std::string title = line.substr(pos);
+
+		getline(instream, line);
+		// Expect a line of "tags: {...}"
+		std::string tags = getWordList(line);
+	}
+	instream.close();
+}

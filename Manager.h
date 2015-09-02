@@ -32,6 +32,16 @@ class Manager
 public:
 
 	/**
+	 * todo
+	 */
+    Manager(); // todo new songList
+
+	/**
+	 * todo
+	 */
+    ~Manager(); // todo delete songList
+
+	/**
 	 * @brief return all the line between {}
 	 * @param line A string containing the current line of the file,
 	 * @return A string containing only the words between brackets in the given line.
@@ -41,13 +51,18 @@ public:
 	/**
 	 * @brief todo
 	 */
-	vector<Song> * readSongsFromFile(std::string songsFileName);
+	list<Song> * readSongsFromFile(std::string songsFileName);
+
+	/**
+	 * @brief todo
+	 */
+    void readParametersFromFile(string parametersFileName);
 
 private:
 
 // --------------------------------- data-members -------------------------------------------------
 	/** @brief The list of songs */
-	list<Song> _theSongs;
+	list<Song> *_theSongs;
 
 // -------------------------------------- methods -------------------------------------------------
 	/**
@@ -62,14 +77,14 @@ private:
 	 * @param theString A reference to the string that we want to convert to a vector.
 	 * @return A vector of strings.
 	 */
-    vector<string> stringToVector(const string &theString);
+    vector<string> & stringToVector(const string &theString);
 
     /**
 	 * @brief A function that convert a string to a map of strings and ints.
 	 * @param theString A reference to the string that we want to convert to a map.
 	 * @return A map of strings and ints.
 	 */
-    map<string, int> stringToMap(const string &theString);
+    map<string, int> & stringToMap(const string &theString);
 };
 
 #endif //EX2_READINGSONGSTEMPLATE_H
