@@ -52,7 +52,7 @@ public:
 	/**
 	 * @brief todo
 	 */
-	list<Song> * readSongsFromFile(std::string songsFileName);
+	list<Song*> * readSongsFromFile(std::string songsFileName);
 
 	/**
 	 * @brief todo
@@ -62,7 +62,7 @@ public:
 private:
 
 // --------------------------------- data-members -------------------------------------------------
-	list<Song> *_theSongs; /** @brief The list of songs */
+	list<Song*> *_theSongs; /** @brief The list of songs */
 	Parameters * _parameters;
 
 // -------------------------------------- methods -------------------------------------------------
@@ -86,6 +86,9 @@ private:
 	 * @return A map of strings and ints.
 	 */
     map<string, int> & stringToMap(const string &theString);
+
+public:
+	void giveScores();
 };
 
 #endif //EX2_READINGSONGSTEMPLATE_H

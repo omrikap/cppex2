@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#include "parameters.h"
 
 #ifndef EX2_SONG_H
 #define EX2_SONG_H
@@ -19,13 +20,13 @@ public:
     /**
 	 * @brief this method calculates the score of every Song object.
 	 */
-    virtual int calculateScore();
+    virtual void calculateScore(string &query, Parameters parameters) = 0;
 
 // --------------------------------- getters and setters ------------------------------------------
     /**
 	 * @brief get the score of the current Song object.
 	 */
-    int getScore(string &query) const;
+    int getScore() const;
 
     /**
 	 * @brief set the score of the current Song object.

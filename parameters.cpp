@@ -17,7 +17,7 @@ Parameters::~Parameters()
 {
 	if (_moods != nullptr)
 	{
-		delete _moods;
+//		delete _moods;
 	}
 }
 

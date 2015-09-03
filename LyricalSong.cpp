@@ -1,6 +1,6 @@
 #include "LyricalSong.h"
 
-int LyricalSong::calculateScore(string &query, Parameters parameters)
+void LyricalSong::calculateScore(string &query, Parameters parameters)
 {
 	int tagScore = 0;
 	int lyricSong = 0;
@@ -10,13 +10,12 @@ int LyricalSong::calculateScore(string &query, Parameters parameters)
 		tagScore = _tags[query] * parameters.get_tagMatchScore();
 	}
 
-	if (find(_lyrics.begin(), _lyrics.end(), query) != _lyrics.end())
+	if (std::find(_lyrics.begin(), _lyrics.end(), query) != _lyrics.end())
 	{
 		lyricSong = parameters.get_lyricsMatchScore();
 	}
 
 	_score = tagScore + lyricSong;
-	return 0;
 }
 
 LyricalSong::LyricalSong(vector<string> &title, map<string, int> &tags, vector<string> &lyrics,

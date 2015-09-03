@@ -14,7 +14,6 @@ public:
 
     void setDeviation(float deviation);
 
-
     const std::string & getName() const;
 
     float getAverage() const;

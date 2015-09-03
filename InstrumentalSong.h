@@ -1,9 +1,11 @@
-
+// InstrumentalSong.h
 
 #ifndef EX2_INSTRUMANTALSONG_H
 #define EX2_INSTRUMANTALSONG_H
 
 #include "Song.h"
+#include "math.h"
+
 using namespace std;
 
 /**
@@ -24,28 +26,13 @@ public:
     /**
      * @brief This method overrides the calculateScore method of the base class Song.
      */
-    int calculateScore() override;
-
-	/**
-	 * @brief
-	 */
-    const vector<string> &getInstruments() const;
-
-    void setInstruments(const vector<string> &_instruments);
-
-    const vector<string> &getPerformedBy() const;
-
-    void setPerformedBy(const vector<string> &_performedBy);
-
-
-    map<string, int> getMood() const;
-
-    void setMood(map<string, int> &mood);
+    virtual void calculateScore(string &query, Parameters parameters) override;
 
 private:
 	vector<string> _instruments; /** A vector containing the instruments in the song. */
 	vector<string> _performedBy; /** A vector containing performers of the song. */
 	map<string, int> _mood; /** A map containing the moods of the song and their weights. */
+	string _strBpm; /** A string representation of the song's bpm */
 };
 
 

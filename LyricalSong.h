@@ -5,6 +5,7 @@
 
 #include "Song.h"
 #include "parameters.h"
+#include <algorithm>
 
 /**
  * @brief This class represents a song with lyrics.
@@ -30,7 +31,7 @@ public:
 	/**
 	 * @brief todo
 	 */
-    int calculateScore(string &query, Parameters parameters);
+	virtual void calculateScore(string &query, Parameters parameters);
 
 	/**
 	 * @brief lyrics getter.
@@ -56,6 +57,7 @@ private:
 
 // --------------------------------- data-members -------------------------------------------------
 	vector<string> _lyrics; /** The lyrics of the song */
+    map<string, int> _lyricsMap; /** The lyrics of the song */
 	vector<string> _lyricsBy; /** The writer of the song */
 };
 

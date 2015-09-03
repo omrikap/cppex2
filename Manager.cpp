@@ -6,7 +6,9 @@
 
 #include <map>
 #include <sstream>
+#include <list>
 #include <math.h>
+#include "Song.h"
 #include "Manager.h"
 #include "LyricalSong.h"
 #include "InstrumentalSong.h"
@@ -21,7 +23,7 @@ const string BPM_LIKELIHOOD = "bpmLikelihoodWeight";
  */
 Manager::Manager()
 {
-	_theSongs = new list<Song>();
+	_theSongs = new list<Song*>();
 }
 
 /*
@@ -103,10 +105,10 @@ std::string Manager::getWordList(const std::string line)
 /**
  * documented in header file.
  */
-list<Song> * Manager::readSongsFromFile(std::string songsFileName)
+list<Song*> * Manager::readSongsFromFile(std::string songsFileName)
 {
 	// this is where the Song objects parsed from the file will be stored.
-//	vector<Song> *_theSongs = new vector<Song>();
+	//	vector<Song> *_theSongs = new vector<Song>();
 
 	std::ifstream instream(songsFileName.c_str());
 	if (!instream.is_open())
@@ -163,7 +165,7 @@ list<Song> * Manager::readSongsFromFile(std::string songsFileName)
 			LyricalSong *lyricalSong = new LyricalSong(stringToVector(title), stringToMap(tags),
 			                                           stringToVector(lyrics),
 			                                           stringToVector(lyricsBy));
-			this->_theSongs->push_back(*lyricalSong);
+			_theSongs->push_back(lyricalSong);
 		}
 		else
 		{
@@ -197,7 +199,7 @@ list<Song> * Manager::readSongsFromFile(std::string songsFileName)
 				                                                          stringToMap(tags),
 				                                                          stringToVector(instruments)
 						,stringToVector(performedBy), bpmToMood(bpmStr));
-				this->_theSongs->push_back(*instrumentalSong);
+				_theSongs->push_back(instrumentalSong);
 			}
 			else
 			{
@@ -206,7 +208,7 @@ list<Song> * Manager::readSongsFromFile(std::string songsFileName)
 				                                                          stringToMap(tags),
 				                                                          stringToVector(instruments)
 						,stringToVector(performedBy));
-				this->_theSongs->push_back(*instrumentalSong);
+				_theSongs->push_back(instrumentalSong);
 			}
 
 		}
@@ -278,15 +280,28 @@ void Manager::readParametersFromFile(string parametersFileName)
 /*
  * documented in the header.
  */
-map<string, int>& Manager::bpmToMood(string& bpm) // fixme
+map<string, int>& Manager::bpmToMood(string& strBpm) // fixme
 {
-	map<string, int>* moods = new map<string, int>();
+	map<string, int> moods;
 	for (int i = 0; i < _parameters->get_moods().size(); ++i)
 	{
-		int weight = (int) floor(exp(((pow(stoi(bpm) - _parameters->get_moods()[i].getAverage(),
-		                                   2) / 2 * pow(_parameters->get_moods()[i].getDeviation
-				(), 2)))));
-		moods->insert(pair<string, double>(_parameters->get_moods()[i].getName(), weight));
+		double m = _parameters->get_moods()[i].getAverage();
+		double s = _parameters->get_moods()[i].getDeviation();
+		double bpm = stoi(strBpm);
+		double exponentValue = exp(-1 * (pow((bpm - m), 2.0)) / (2.0 * pow(s, 2.0)));
+		cout << exponentValue << endl; // todo remove
 	}
 	return *moods;
+}
+
+void Manager::giveScores()
+{
+	size_t songsAmount = _theSongs->size();
+	string query = "blues"; // todo remove. for testing.
+
+	for (list<Song*>::iterator it = _theSongs->begin(); it != _theSongs->end(); it++)
+	{
+		(*it)->calculateScore(query, *_parameters);
+		cout << (*it)->getScore() << endl;
+	}
 }

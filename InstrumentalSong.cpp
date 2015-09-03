@@ -31,56 +31,29 @@ InstrumentalSong::InstrumentalSong(vector<string> &title, map<string, int> &tags
 /**
  * Documented in header file.
  */
-int InstrumentalSong::calculateScore()
+void InstrumentalSong::calculateScore(string &query, Parameters parameters)
 {
+	int tagScore = 0;
+	int instruments = 0;
+	int mood = 0;
+
+	tagScore = _tags[query] * parameters.get_tagMatchScore();
+
+	if (std::find(_instruments.begin(), _instruments.end(), query) != _instruments.end())
+	{
+		instruments = parameters.get_lyricsMatchScore();
+	}
+
+	if (std::find(parameters.get_moods().begin(), parameters.get_moods().end(), query) !=
+			parameters.get_moods().end())
+	{
+		double m = parameters.get_moods()[i].getAverage();
+		double s = parameters.get_moods()[i].getDeviation();
+		double bpm = stoi(_strBpm);
+		double exponentValue = exp(-1 * (pow((bpm - m), 2.0)) / (2.0 * pow(s, 2.0)));
+		mood =
+	}
+
+	_score = tagScore + instruments;
 	cout << this->_score; //todo remove
-	return Song::calculateScore();
-}
-
-/**
- * Documented in header file.
- */
-const vector<string> &InstrumentalSong::getInstruments() const
-{
-	return _instruments;
-}
-
-/**
- * Documented in header file.
- */
-void InstrumentalSong::setInstruments(const vector<string> &_instruments)
-{
-	InstrumentalSong::_instruments = _instruments;
-}
-
-/**
- * Documented in header file.
- */
-const vector<string> &InstrumentalSong::getPerformedBy() const
-{
-	return _performedBy;
-}
-
-/**
- * Documented in header file.
- */
-void InstrumentalSong::setPerformedBy(const vector<string> &_performedBy)
-{
-	InstrumentalSong::_performedBy = _performedBy;
-}
-
-/**
- * Documented in header file.
- */
- void InstrumentalSong::setMood(map<string, int> &mood)
-{
-	InstrumentalSong::_mood = mood;
-}
-
-/**
- * Documented in header file.
- */
-map<string, int> InstrumentalSong::getMood() const
-{
-	return _mood;
 }

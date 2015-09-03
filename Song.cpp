@@ -1,18 +1,17 @@
 #include "Song.h"
 
-
 /*
  * documented in the header file
  */
-int Song::calculateScore()
+void Song::calculateScore(string &query, Parameters parameters)
 {
-	return 0;
+
 }
 
 /*
  * documented in the header file
  */
-int Song::getScore(string &query) const
+int Song::getScore() const
 {
 	return _score;
 }
