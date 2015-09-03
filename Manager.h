@@ -62,8 +62,7 @@ public:
 private:
 
 // --------------------------------- data-members -------------------------------------------------
-	/** @brief The list of songs */
-	list<Song> *_theSongs;
+	list<Song> *_theSongs; /** @brief The list of songs */
 	Parameters * _parameters;
 
 // -------------------------------------- methods -------------------------------------------------
@@ -72,7 +71,7 @@ private:
 	 * @param bpm A string with the bpm value of the song.
 	 * @return A map which contains the moods of the song and their scores.
 	 */
-	map<string, double> * bpmToMood(string &bpm);
+	map<string, int> & bpmToMood(string &bpm);
 
     /**
 	 * @brief A function that convert a string to a vector of strings.

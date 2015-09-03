@@ -12,7 +12,7 @@ int Song::calculateScore()
 /*
  * documented in the header file
  */
-int Song::getScore() const
+int Song::getScore(string &query) const
 {
 	return _score;
 }

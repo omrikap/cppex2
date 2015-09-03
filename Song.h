@@ -25,7 +25,7 @@ public:
     /**
 	 * @brief get the score of the current Song object.
 	 */
-    int getScore() const;
+    int getScore(string &query) const;
 
     /**
 	 * @brief set the score of the current Song object.

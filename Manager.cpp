@@ -4,25 +4,29 @@
 // todo 6. implement calculateScore
 // todo 7. decide on sorting method.
 
+#include <map>
 #include <sstream>
 #include <math.h>
 #include "Manager.h"
-#include "Song.h"
 #include "LyricalSong.h"
 #include "InstrumentalSong.h"
 
-#define EMPTY_LINE 4
 const string TAG_MATCH = "tagMatchScore";
 const string LYRICS_MATCH = "lyricsMatchScore";
 const string INSTRUMENT_MATCH = "instrumentMatchScore";
 const string BPM_LIKELIHOOD = "bpmLikelihoodWeight";
 
+/*
+ * documented in the header.
+ */
 Manager::Manager()
 {
 	_theSongs = new list<Song>();
 }
 
-
+/*
+ * documented in the header.
+ */
 Manager::~Manager()
 {
 	if (_theSongs != nullptr)
@@ -141,7 +145,6 @@ list<Song> * Manager::readSongsFromFile(std::string songsFileName)
 		std::string instruments = "";
 		std::string performedBy = "";
 		std::string bpmStr = "";
-		map<string, double> * moodMap = nullptr;
 
 		getline(instream, line);
 		// Expect either lyrics or instruments.
@@ -188,30 +191,33 @@ list<Song> * Manager::readSongsFromFile(std::string songsFileName)
 
 			if (line.substr(0, BPM.size()).compare(BPM) == 0)
 			{
-
 				pos = BPM.size() + 2;
 				bpmStr = line.substr(pos);
-				moodMap = bpmToMood(bpmStr);
-
-				// TODO what happens with bpm.
+				InstrumentalSong *instrumentalSong = new InstrumentalSong(stringToVector(title),
+				                                                          stringToMap(tags),
+				                                                          stringToVector(instruments)
+						,stringToVector(performedBy), bpmToMood(bpmStr));
+				this->_theSongs->push_back(*instrumentalSong);
 			}
 			else
 			{
 				assert ( (line.compare(SEPARATOR) == 0) || (line.compare(END_OF_SONGS) == 0));
-
-				// TODO what happens if no bpm?
+				InstrumentalSong *instrumentalSong = new InstrumentalSong(stringToVector(title),
+				                                                          stringToMap(tags),
+				                                                          stringToVector(instruments)
+						,stringToVector(performedBy));
+				this->_theSongs->push_back(*instrumentalSong);
 			}
-			InstrumentalSong *instrumentalSong = new InstrumentalSong(stringToVector(title),
-			                                                          stringToMap(tags),
-			                                                          stringToVector(instruments)
-					,stringToVector(performedBy), *moodMap);
-			this->_theSongs->push_back(*instrumentalSong);
+
 		}
 	}
 	instream.close();
 	return _theSongs;
 }
 
+/*
+ * documented in the header.
+ */
 void Manager::readParametersFromFile(string parametersFileName)
 {
 	_parameters = new Parameters();
@@ -269,14 +275,18 @@ void Manager::readParametersFromFile(string parametersFileName)
 	_parameters->set_moods(moods);
 }
 
-map<string, double>* Manager::bpmToMood(string& bpm)
+/*
+ * documented in the header.
+ */
+map<string, int>& Manager::bpmToMood(string& bpm) // fixme
 {
-	map<string, double>* moods = new map<string, double>();
+	map<string, int>* moods = new map<string, int>();
 	for (int i = 0; i < _parameters->get_moods().size(); ++i)
 	{
-		double weight = floor(exp(((pow(stoi(bpm) - _parameters->get_moods()[i].getAverage(), 2) /
-		2 * pow(_parameters->get_moods()[i].getDeviation(), 2)))));
+		int weight = (int) floor(exp(((pow(stoi(bpm) - _parameters->get_moods()[i].getAverage(),
+		                                   2) / 2 * pow(_parameters->get_moods()[i].getDeviation
+				(), 2)))));
 		moods->insert(pair<string, double>(_parameters->get_moods()[i].getName(), weight));
 	}
-	return moods;
+	return *moods;
 }

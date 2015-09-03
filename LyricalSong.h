@@ -4,6 +4,7 @@
 #define EX2_LYRICALSONG_H
 
 #include "Song.h"
+#include "parameters.h"
 
 /**
  * @brief This class represents a song with lyrics.
@@ -29,7 +30,7 @@ public:
 	/**
 	 * @brief todo
 	 */
-    int calculateScore();
+    int calculateScore(string &query, Parameters parameters);
 
 	/**
 	 * @brief lyrics getter.
