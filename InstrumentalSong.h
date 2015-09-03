@@ -16,7 +16,7 @@ public:
 	 * @brief A constructor to be used by the manager.
 	 */
     InstrumentalSong(vector<string> &title, map<string, int> &tags, vector<string> &instruments,
-    vector<string> &performedBy, map<string, int> &mood);
+    vector<string> &performedBy, map<string, double> &mood);
 
 	/**
 	 * @brief This method overrides the calculateScore method of the base class Song.
@@ -34,14 +34,15 @@ public:
 
     void setPerformedBy(const vector<string> &_performedBy);
 
-    const map<string, int> &getMood() const;
 
-    void setMood(const map<string, int> &_mood);
+    map<string, double> * getMood() const;
+
+    void setMood(map<string, double> *mood);
 
 private:
 	vector<string> _instruments; /** A vector containing the instruments in the song. */
 	vector<string> _performedBy; /** A vector containing performers of the song. */
-	map<string, int> _mood; /** A map containing the moods of the song and their weights. */
+	map<string, double> *_mood; /** A map containing the moods of the song and their weights. */
 };
 
 

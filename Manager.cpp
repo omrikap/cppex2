@@ -1,19 +1,21 @@
 // Manager.cpp
 
-// todo 4. parse the parameters file.
 // todo 5. implement bpmToMood.
 // todo 6. implement calculateScore
 // todo 7. decide on sorting method.
 
 #include <sstream>
+#include <math.h>
 #include "Manager.h"
 #include "Song.h"
 #include "LyricalSong.h"
 #include "InstrumentalSong.h"
 
-#define WEIGHTS 4
-#define TAG_MATCH "tagMatchScore:"
-#define LYRICS_MATCH "lyricsMatchScore:"
+#define EMPTY_LINE 4
+const string TAG_MATCH = "tagMatchScore";
+const string LYRICS_MATCH = "lyricsMatchScore";
+const string INSTRUMENT_MATCH = "instrumentMatchScore";
+const string BPM_LIKELIHOOD = "bpmLikelihoodWeight";
 
 Manager::Manager()
 {
@@ -139,7 +141,7 @@ list<Song> * Manager::readSongsFromFile(std::string songsFileName)
 		std::string instruments = "";
 		std::string performedBy = "";
 		std::string bpmStr = "";
-		std::string moodStr = "sad 10"; // todo remove. Temporary to prevent crash.
+		map<string, double> * moodMap = nullptr;
 
 		getline(instream, line);
 		// Expect either lyrics or instruments.
@@ -189,7 +191,7 @@ list<Song> * Manager::readSongsFromFile(std::string songsFileName)
 
 				pos = BPM.size() + 2;
 				bpmStr = line.substr(pos);
-//				string moodString = bpmToMood(bpmStr); fixme
+				moodMap = bpmToMood(bpmStr);
 
 				// TODO what happens with bpm.
 			}
@@ -202,7 +204,7 @@ list<Song> * Manager::readSongsFromFile(std::string songsFileName)
 			InstrumentalSong *instrumentalSong = new InstrumentalSong(stringToVector(title),
 			                                                          stringToMap(tags),
 			                                                          stringToVector(instruments)
-					,stringToVector(performedBy), stringToMap(moodStr));
+					,stringToVector(performedBy), *moodMap);
 			this->_theSongs->push_back(*instrumentalSong);
 		}
 	}
@@ -212,6 +214,9 @@ list<Song> * Manager::readSongsFromFile(std::string songsFileName)
 
 void Manager::readParametersFromFile(string parametersFileName)
 {
+	_parameters = new Parameters();
+	vector<Mood> *moods = new vector<Mood>();
+
 	std::ifstream instream(parametersFileName.c_str());
 	if (!instream.is_open())
 	{
@@ -220,30 +225,26 @@ void Manager::readParametersFromFile(string parametersFileName)
 
 	std::string line = "";
 
-	for (int i = 0; i < WEIGHTS; ++i)
-	{
-		getline(instream, line);
-		cout << line << endl; // todo remove
+	size_t pos = 0;
 
-//		std::vector<std::string> &split(const std::string &s, char delim,std::vector<std::string> &elems) {
-//			std::stringstream ss(s);
-//			std::string item;
-//			while (std::getline(ss, item, delim)) {
-//				if (item.length() > 0) {
-//					elems.push_back(item);
-//				}
-//			}
-//			return elems;
-//		}
-//
-//
-//		std::vector<std::string> split(const std::string &s, char delim) {
-//			std::vector<std::string> elems;
-//			split(s, delim, elems);
-//			return elems;
-//		}
-	}
+	// expecting to get the four weights by the format order.
+	getline(instream, line);
+	pos = TAG_MATCH.size() + 2;
+	_parameters->set_tagMatchScore(stoi(line.substr(pos)));
 
+	getline(instream, line);
+	pos = LYRICS_MATCH.size() + 2;
+	_parameters->set_lyricsMatchScore(stoi(line.substr(pos)));
+
+	getline(instream, line);
+	pos = INSTRUMENT_MATCH.size() + 2;
+	_parameters->set_instrumentsMatchScore(stoi(line.substr(pos)));
+
+	getline(instream, line);
+	pos = BPM_LIKELIHOOD.size() + 2;
+	_parameters->set_bpmLikeMatchScore(stoi(line.substr(pos)));
+
+	// get the moods from the file lines
 	while(getline(instream, line))
 	{
 		if (line.compare("") == 0)
@@ -251,15 +252,31 @@ void Manager::readParametersFromFile(string parametersFileName)
 			// skip empty lines
 			continue;
 		}
+		Mood * mood = new Mood();
 
-		getline(instream, line);
-		// Expect a line of "title: ..."
-		size_t pos = TITLE.size() + 2;
-		std::string title = line.substr(pos);
+		pos = line.find(":");
+		mood->setName(line.substr(0, pos));
+		line.erase(0, pos + 2);
+		assert(line.substr(0, ' ') != "");
+		mood->setAverage(stof(line.substr(0, ' ')));
+		line.erase(0, line.find(' ') + 3);
+		assert(line.substr(0, ' ') != "");
+		mood->setDeviation(stof(line.substr(0)));
 
-		getline(instream, line);
-		// Expect a line of "tags: {...}"
-		std::string tags = getWordList(line);
+		moods->push_back(*mood);
 	}
 	instream.close();
+	_parameters->set_moods(moods);
+}
+
+map<string, double>* Manager::bpmToMood(string& bpm)
+{
+	map<string, double>* moods = new map<string, double>();
+	for (int i = 0; i < _parameters->get_moods().size(); ++i)
+	{
+		double weight = floor(exp(((pow(stoi(bpm) - _parameters->get_moods()[i].getAverage(), 2) /
+		2 * pow(_parameters->get_moods()[i].getDeviation(), 2)))));
+		moods->insert(pair<string, double>(_parameters->get_moods()[i].getName(), weight));
+	}
+	return moods;
 }

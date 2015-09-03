@@ -5,14 +5,15 @@
  */
 InstrumentalSong::InstrumentalSong(vector<string> &title, map<string, int> &tags,
                                    vector<string> &instruments, vector<string> &performedBy,
-                                   map<string, int> &mood)
+                                   map<string, double> &mood)
 {
 //	todo add nullptr verification
-	this->_title = title;
-	this->_tags = tags;
-	this->_instruments = instruments;
-	this->_performedBy = performedBy;
-	this->_mood = mood;
+	_title = title;
+	_tags = tags;
+	_instruments = instruments;
+	_performedBy = performedBy;
+//	_mood = new map<string, double>();
+	*_mood = mood;
 }
 
 /**
@@ -59,15 +60,15 @@ void InstrumentalSong::setPerformedBy(const vector<string> &_performedBy)
 /**
  * Documented in header file.
  */
-const map<string, int> &InstrumentalSong::getMood() const
+ void InstrumentalSong::setMood(map<string, double> *mood)
 {
-	return _mood;
+	InstrumentalSong::_mood = mood;
 }
 
 /**
  * Documented in header file.
  */
-void InstrumentalSong::setMood(const map<string, int> &_mood)
+map<string, double> *InstrumentalSong::getMood() const
 {
-	InstrumentalSong::_mood = _mood;
+	return _mood;
 }

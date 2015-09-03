@@ -12,6 +12,7 @@
 #include <list>
 #include <vector>
 #include "Song.h"
+#include "parameters.h"
 
 const std::string SEPARATOR = "=";
 const std::string END_OF_SONGS = "***";
@@ -34,12 +35,12 @@ public:
 	/**
 	 * todo
 	 */
-    Manager(); // todo new songList
+    Manager(); // todo new songList and parameters
 
 	/**
 	 * todo
 	 */
-    ~Manager(); // todo delete songList
+    ~Manager(); // todo delete songList and parameters
 
 	/**
 	 * @brief return all the line between {}
@@ -63,6 +64,7 @@ private:
 // --------------------------------- data-members -------------------------------------------------
 	/** @brief The list of songs */
 	list<Song> *_theSongs;
+	Parameters * _parameters;
 
 // -------------------------------------- methods -------------------------------------------------
 	/**
@@ -70,7 +72,7 @@ private:
 	 * @param bpm A string with the bpm value of the song.
 	 * @return A map which contains the moods of the song and their scores.
 	 */
-    map<string, int> bpmToMood(string &bpm);
+	map<string, double> * bpmToMood(string &bpm);
 
     /**
 	 * @brief A function that convert a string to a vector of strings.
